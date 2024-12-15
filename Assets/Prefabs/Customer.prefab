@@ -128,3 +128,6 @@ MonoBehaviour:
   stoppingDistance: 0.75
   onProductBought: {fileID: 11400000, guid: 7562886488eda3643872f3ce138cc53f, type: 2}
   onProductRefused: {fileID: 11400000, guid: e348e218ee1529b4ba548eb385b4c57a, type: 2}
+  onProductStolen: {fileID: 11400000, guid: abee686cb759ace4c914477a6f4aab72, type: 2}
+  thiefChance: 0.9
+  thiefReactionTimeSeconds: 3

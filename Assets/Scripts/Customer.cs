@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Customer : MonoBehaviour
@@ -12,6 +13,7 @@ public class Customer : MonoBehaviour
     [Header("Events")]
     [SerializeField] private GameEvent onProductBought;
     [SerializeField] private GameEvent onProductRefused;
+    [SerializeField] private GameEvent onProductStolen;
 
     private Transform moveTarget;
 
@@ -21,12 +23,17 @@ public class Customer : MonoBehaviour
     private float minPriceDeviation = 0.7f;
     private float maxPriceDeviation = 1.2f;
 
-
     private float currentMoney;
+
+    [Header("Thief behaviour")]
+    [SerializeField] private float thiefChance = 0.9f;
+    [SerializeField] private float thiefReactionTimeSeconds = 3;
+    private bool isThief;
 
     private void Start()
     {
         currentMoney = Random.Range(minAmountOfMoney, maxAmountOfMoney);
+        isThief = Random.Range(0, thiefChance) <= 0.5f;
         FindNearbyShop();
     }
 
@@ -38,8 +45,13 @@ public class Customer : MonoBehaviour
         }
     }
 
-    private void InspectShop(Shop shop)
+    private IEnumerator InspectShop(Shop shop)
     {
+        if (isThief)
+        {
+            shop.OnThiefEntered(thiefReactionTimeSeconds, () => ConvertBackToNormal());
+            yield return new WaitForSeconds(thiefReactionTimeSeconds);
+        }
         var products = shop.GetProducts();
         foreach (var product in products)
         {
@@ -47,8 +59,19 @@ public class Customer : MonoBehaviour
         }
         StartLeaving();
     }
+    public void ConvertBackToNormal()
+    {
+        isThief = false;
+    }
+
     private void InspectProduct(Product product)
     {
+        if (isThief)
+        {
+            StealProduct(product);
+            return;
+        }
+
         float price = product.GetCurrentPrice();
 
         if (price > currentMoney)
@@ -66,6 +89,11 @@ public class Customer : MonoBehaviour
             return;
         }
         RefuseProduct(product);
+    }
+
+    private void StealProduct(Product product)
+    {
+        onProductStolen.RaiseEvent(product);
     }
 
     private void BuyProduct(Product product)
@@ -120,7 +148,7 @@ public class Customer : MonoBehaviour
         isTargetReached = true;
         if (target.TryGetComponent(out Shop shop))
         {
-            InspectShop(shop);
+            StartCoroutine(InspectShop(shop));
             return;
         }
         if (target == transform.parent)
