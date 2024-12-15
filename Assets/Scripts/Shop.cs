@@ -24,6 +24,11 @@ public class Shop : MonoBehaviour, IPointerClickHandler
             products.Add(productScr);
         }
     }
+
+    public List<Product> GetProducts()
+    {
+        return products;
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         shopUI.SetActive(true);
