@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e7a43e8521208b4e820b09de9df3075, type: 3}
   m_Name: Product 2
   m_EditorClassIdentifier: 
-  productName: Product1
-  price: 100
-  acquisitionPrice: 80
+  productName: Product2
+  price: 56
+  acquisitionPrice: 54
   uiSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}

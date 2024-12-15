@@ -126,3 +126,5 @@ MonoBehaviour:
   maxShopDistance: 20
   speed: 3
   stoppingDistance: 0.75
+  onProductBought: {fileID: 11400000, guid: 7562886488eda3643872f3ce138cc53f, type: 2}
+  onProductRefused: {fileID: 11400000, guid: e348e218ee1529b4ba548eb385b4c57a, type: 2}

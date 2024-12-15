@@ -1,24 +1,48 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Product : MonoBehaviour
 {
+    [SerializeField] private Image image;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI priceText;
+
+
     private ProductSO productData;
 
+    private float currentPrice;
     public void Init(ProductSO productData)
     {
         this.productData = productData;
+        currentPrice = productData.price;
+        image.sprite = productData.uiSprite;
+        nameText.text = productData.name;
+        priceText.text = currentPrice.ToString();
     }
 
-    private void Start()
+    public void SetCurrentPrice(string price)
     {
-        var image = GetComponent<Image>();
-        image.sprite = productData.uiSprite;
+        if (float.TryParse(price, out float result))
+        {
+            currentPrice = result;
+            UpdatePriceText();
+        }
+    }
+
+
+    public void OpenPriceEditMenu()
+    {
+        PriceChangerInputField.instance.Open(SetCurrentPrice);
+    }
+    public void UpdatePriceText()
+    {
+        priceText.text = currentPrice.ToString();
     }
 
     public float GetCurrentPrice()
     {
-        return productData.price;
+        return currentPrice;
     }
 
     public float GetAcquisitionPrice()

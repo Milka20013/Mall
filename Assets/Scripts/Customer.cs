@@ -9,9 +9,13 @@ public class Customer : MonoBehaviour
     [SerializeField] private float stoppingDistance = 0.75f;
     private bool isTargetReached;
 
+    [Header("Events")]
+    [SerializeField] private GameEvent onProductBought;
+    [SerializeField] private GameEvent onProductRefused;
+
     private Transform moveTarget;
 
-    private float minAmountOfMoney = 50;
+    private float minAmountOfMoney = 100;
     private float maxAmountOfMoney = 200;
 
     private float minPriceDeviation = 0.7f;
@@ -66,12 +70,13 @@ public class Customer : MonoBehaviour
 
     private void BuyProduct(Product product)
     {
-
+        currentMoney -= product.GetCurrentPrice();
+        onProductBought.RaiseEvent(product);
     }
 
     private void RefuseProduct(Product product)
     {
-
+        onProductRefused.RaiseEvent(product);
     }
 
     private void StartLeaving()
